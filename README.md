@@ -10,7 +10,7 @@ The Challenge is to build the backend for the application Very Useful Tools to R
 - [x] Support GraphQL Mutations
 - [x] [GraphQL Playground](https://github.com/graphql/graphql-playground)
 - [ ] Add Relay support
-- [ ] Automated tests using (Jest)[https://jestjs.io/]
+- [ ] Automated tests using [Jest](https://jestjs.io/)
 - [ ] Authentication system
 - [ ] CI/CD (GitHub Actions or CircleCI)
 
