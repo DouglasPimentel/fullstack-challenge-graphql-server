@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import UserInterface from "./UserInterface";
 
-const UserSchema = new mongoose.Schema(
+const UserSchema = new mongoose.Schema<UserInterface>(
   {
     name: {
       type: String,

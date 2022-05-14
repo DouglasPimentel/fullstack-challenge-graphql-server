@@ -22,7 +22,7 @@ const ToolSchema = new mongoose.Schema<ToolInterface>(
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      ref: "User",
       required: true,
     },
   },

@@ -5,8 +5,10 @@ import {
   GraphQLList,
 } from "graphql";
 import ToolInterface from "./ToolInterface";
+import UserModel from "../user/UserModel";
+import UserType from "../user/UserType";
 
-const ToolType = new GraphQLObjectType({
+const ToolType: GraphQLObjectType = new GraphQLObjectType({
   name: "Tool",
   description: "Tool data",
   fields: () => ({
@@ -32,7 +34,13 @@ const ToolType = new GraphQLObjectType({
     },
     userId: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: (tool: ToolInterface) => tool.userId,
+      resolve: (tool: ToolInterface) => tool._id,
+    },
+    user: {
+      type: UserType,
+      resolve: async (parent) => {
+        return await UserModel.findById(parent.userId);
+      },
     },
   }),
 });

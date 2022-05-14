@@ -1,7 +1,14 @@
-import { GraphQLObjectType, GraphQLNonNull, GraphQLString } from "graphql";
+import {
+  GraphQLObjectType,
+  GraphQLNonNull,
+  GraphQLString,
+  GraphQLList,
+} from "graphql";
 import UserInterface from "./UserInterface";
+import ToolType from "../tool/ToolType";
+import ToolModel from "../tool/ToolModel";
 
-const UserType = new GraphQLObjectType({
+const UserType: GraphQLObjectType = new GraphQLObjectType({
   name: "User",
   description: "User data",
   fields: () => ({
@@ -20,6 +27,12 @@ const UserType = new GraphQLObjectType({
     password: {
       type: new GraphQLNonNull(GraphQLString),
       resolve: (user: UserInterface) => user.password,
+    },
+    tools: {
+      type: new GraphQLList(ToolType),
+      resolve: async (parent) => {
+        return await ToolModel.find({ userId: parent._id });
+      },
     },
   }),
 });
