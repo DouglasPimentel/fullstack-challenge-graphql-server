@@ -1,5 +1,5 @@
-import { GraphQLNonNull, GraphQLObjectType, GraphQLID } from "graphql";
-import { connectionArgs, fromGlobalId, globalIdField } from "graphql-relay";
+import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { connectionArgs, globalIdField } from "graphql-relay";
 
 import { NodeField, NodesField } from "../../interface/NodeInterface";
 
@@ -24,6 +24,17 @@ export default new GraphQLObjectType<GraphQLContext, any>({
       },
       resolve: async (_, args, context) => {
         return await UserLoader.loadUsers(context, args);
+      },
+    },
+    user: {
+      type: UserType,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLString),
+        },
+      },
+      resolve: async (_, args, context) => {
+        return await UserLoader.load(context, args.id);
       },
     },
     tools: {
