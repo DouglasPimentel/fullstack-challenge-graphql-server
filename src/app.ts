@@ -8,6 +8,7 @@ import * as loaders from "./loader";
 import { GraphQLContext } from "./types";
 import { getDataloaders } from "./helper";
 import schema from "./graphql/schema";
+import { GraphQLError } from "graphql";
 
 const app = new Koa();
 const router = new Router();
@@ -47,7 +48,7 @@ router.all(
         extensions: () => {
           return null as any;
         },
-        formatError: (error) => {
+        customFormatErrorFn: (error: GraphQLError) => {
           if (error.name || error.name !== "GraphQLError") {
             console.error(error);
           } else {
