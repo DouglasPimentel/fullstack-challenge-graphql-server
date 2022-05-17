@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema<UserInterface>(
       createdAt: "created_at",
       updatedAt: "updated_at",
     },
-    collection: "user",
+    collection: "User",
   }
 );
 
@@ -44,9 +44,9 @@ UserSchema.methods = {
   },
 };
 
-const UserModel: mongoose.Model<UserInterface> = mongoose.model(
-  "User",
-  UserSchema
-);
+const UserModel: mongoose.Model<UserInterface> = mongoose.model<
+  UserInterface,
+  mongoose.Model<UserInterface>
+>("User", UserSchema);
 
 export default UserModel;

@@ -31,13 +31,13 @@ const ToolSchema = new mongoose.Schema<ToolInterface>(
       createdAt: "created_at",
       updatedAt: "updated_at",
     },
-    collection: "tool",
+    collection: "Tool",
   }
 );
 
-const ToolModel: mongoose.Model<ToolInterface> = mongoose.model(
-  "Tool",
-  ToolSchema
-);
+const ToolModel: mongoose.Model<ToolInterface> = mongoose.model<
+  ToolInterface,
+  mongoose.Model<ToolInterface>
+>("Tool", ToolSchema);
 
 export default ToolModel;

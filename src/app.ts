@@ -1,9 +1,13 @@
-import Koa from "koa";
+import Koa, { Context, Request, Response } from "koa";
 import Router from "koa-router";
 import bodyParser from "koa-bodyparser";
-import { graphqlHTTP } from "koa-graphql";
+import { graphqlHTTP, OptionsData } from "koa-graphql";
 import koaPlayground from "graphql-playground-middleware-koa";
-import schema from "./schema";
+
+import * as loaders from "./loader";
+import { GraphQLContext } from "./types";
+import { getDataloaders } from "./helper";
+import schema from "./graphql/schema";
 
 const app = new Koa();
 const router = new Router();
@@ -14,7 +18,62 @@ router.get("/", (ctx) => {
   };
 });
 
-router.all("/graphql", graphqlHTTP({ schema, graphiql: true }));
+// Middleware to get dataloaders
+app.use((ctx, next) => {
+  ctx.dataloaders = getDataloaders(loaders);
+  return next();
+});
+
+router.all(
+  "/graphql",
+  graphqlHTTP(
+    async (
+      request: Request,
+      ctx: Response,
+      koaContext: Context
+    ): Promise<OptionsData> => {
+      const { dataloaders } = koaContext;
+
+      return {
+        graphiql: true,
+        schema,
+        rootValue: {
+          request: ctx.req,
+        },
+        context: {
+          dataloaders,
+          koaContext,
+        } as GraphQLContext,
+        extensions: () => {
+          return null as any;
+        },
+        formatError: (error) => {
+          if (error.name || error.name !== "GraphQLError") {
+            console.error(error);
+          } else {
+            console.log("GraphQLWrongQuery:", error.message);
+          }
+
+          if (error.name && error.name === "BadRequestError") {
+            ctx.status = 400;
+            ctx.body = "Bad Request";
+            return {
+              message: "Bad Request",
+            };
+          }
+
+          console.error("GraphQL Error", { error });
+
+          return {
+            message: error.message,
+            locations: error.locations,
+            stack: error.stack,
+          };
+        },
+      };
+    }
+  )
+);
 router.all("/playground", koaPlayground({ endpoint: "/graphql" }));
 
 app.use(bodyParser());

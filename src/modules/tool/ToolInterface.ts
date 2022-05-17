@@ -4,7 +4,7 @@ interface ToolInterface extends mongoose.Document {
   name: string;
   link: string;
   description: string;
-  tags: String[];
+  tags: string[];
   userId: mongoose.Types.ObjectId;
   created_at: Date;
   updated_at: Date;
