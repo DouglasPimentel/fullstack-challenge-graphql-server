@@ -1,4 +1,4 @@
-import Koa, { Context, Request, Response } from "koa";
+import Koa, { Context, Request, Response, Next } from "koa";
 import Router from "koa-router";
 import bodyParser from "koa-bodyparser";
 import { graphqlHTTP, OptionsData } from "koa-graphql";
@@ -9,6 +9,8 @@ import { GraphQLContext } from "./types";
 import { getDataloaders } from "./helper";
 import schema from "./graphql/schema";
 import { GraphQLError } from "graphql";
+
+import { decodeToken } from "./auth/auth";
 
 const app = new Koa();
 const router = new Router();
@@ -35,6 +37,11 @@ router.all(
     ): Promise<OptionsData> => {
       const { dataloaders } = koaContext;
 
+      const token =
+        request && request.headers.authorization
+          ? decodeToken(request.headers.authorization)
+          : null;
+
       return {
         graphiql: true,
         schema,
@@ -44,7 +51,8 @@ router.all(
         context: {
           dataloaders,
           koaContext,
-        } as GraphQLContext,
+          userId: token ? token : null,
+        } as unknown as GraphQLContext,
         extensions: () => {
           return null as any;
         },

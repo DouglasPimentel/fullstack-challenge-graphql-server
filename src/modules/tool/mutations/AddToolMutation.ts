@@ -32,13 +32,16 @@ export default mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLString),
     },
   },
-  mutateAndGetPayload: async ({
-    name,
-    link,
-    description,
-    tags,
-    userId,
-  }: ToolRegisterMutationArgs) => {
+  mutateAndGetPayload: async (
+    { name, link, description, tags }: ToolRegisterMutationArgs,
+    context
+  ) => {
+    if (!context.userId) {
+      return {
+        error: "not authenticated",
+      };
+    }
+
     let tool = await ToolModel.findOne({ name });
 
     if (tool) {
@@ -47,7 +50,13 @@ export default mutationWithClientMutationId({
       };
     }
 
-    tool = new ToolModel({ name, link, description, tags, userId });
+    tool = new ToolModel({
+      name,
+      link,
+      description,
+      tags,
+      userId: context.userId.id,
+    });
 
     await tool.save();
 

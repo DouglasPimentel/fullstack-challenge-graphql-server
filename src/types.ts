@@ -15,4 +15,5 @@ export interface GraphQLDataloaders {
 export type GraphQLContext = {
   dataloaders: GraphQLDataloaders;
   koaContext: Context;
+  userId?: string;
 };
