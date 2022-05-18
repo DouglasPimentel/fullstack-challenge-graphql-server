@@ -10,7 +10,6 @@ interface ToolRegisterMutationArgs {
   link: string;
   description: string;
   tags: string[];
-  userId: string;
 }
 
 export default mutationWithClientMutationId({
@@ -27,9 +26,6 @@ export default mutationWithClientMutationId({
     },
     tags: {
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
-    },
-    userId: {
-      type: new GraphQLNonNull(GraphQLString),
     },
   },
   mutateAndGetPayload: async (

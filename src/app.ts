@@ -51,8 +51,8 @@ router.all(
         context: {
           dataloaders,
           koaContext,
-          userId: token ? token : null,
-        } as unknown as GraphQLContext,
+          userId: token,
+        } as GraphQLContext,
         extensions: () => {
           return null as any;
         },

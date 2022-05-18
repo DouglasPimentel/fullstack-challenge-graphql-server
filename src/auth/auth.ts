@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { config } from "../config";
+import { AuthTokenPayload } from "../types";
 
 type UserType = {
   _id: string;
@@ -10,10 +11,6 @@ export function generateToken(user: UserType) {
     expiresIn: 60 * 60,
   })}`;
 }
-
-type AuthTokenPayload = {
-  userId: string;
-};
 
 export function decodeToken(authHeader: string) {
   const token = authHeader.replace("JWT ", "");
