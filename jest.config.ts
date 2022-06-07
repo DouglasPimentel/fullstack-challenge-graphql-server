@@ -10,6 +10,8 @@ export default {
     "<rootDir>/**/__tests__/**/*.[jt]s?(x)",
     "**/?(*.)+(spec|test).[tj]s?(x)",
   ],
+  preset: "ts-jest",
+  testEnvironment: "node",
   cacheDirectory: "/tmp/jest_rs",
   clearMocks: true,
   collectCoverage: true,
