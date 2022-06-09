@@ -42,10 +42,6 @@ export default new GraphQLObjectType<GraphQLContext, any>({
         ...connectionArgs,
       },
       resolve: async (_, args, context) => {
-        if (!context.userId) {
-          return null;
-        }
-
         return await ToolLoader.loadTools(context, args);
       },
     },
