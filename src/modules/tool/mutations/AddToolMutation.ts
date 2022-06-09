@@ -1,6 +1,6 @@
 import { GraphQLNonNull, GraphQLString, GraphQLList } from "graphql";
 import { mutationWithClientMutationId, toGlobalId } from "graphql-relay";
-import { ToolConnection } from "../ToolType";
+import ToolType from "../ToolType";
 import ToolModel from "../ToolModel";
 
 import * as ToolLoader from "../ToolLoader";
@@ -57,23 +57,19 @@ export default mutationWithClientMutationId({
     await tool.save();
 
     return {
-      tool: tool._id,
+      id: tool._id,
       error: null,
     };
   },
   outputFields: {
-    toolEdge: {
-      type: ToolConnection.edgeType,
+    tool: {
+      type: ToolType,
       resolve: async ({ id }, _, context) => {
-        const newTool = await ToolLoader.load(context, id);
-
-        if (!newTool) {
+        if (!id) {
           return null;
         }
 
-        return {
-          cursor: toGlobalId("Tool", newTool._id),
-        };
+        return await ToolLoader.load(context, id);
       },
     },
     error: {
