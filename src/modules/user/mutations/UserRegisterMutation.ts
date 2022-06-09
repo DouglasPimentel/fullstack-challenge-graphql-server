@@ -1,6 +1,6 @@
 import { GraphQLNonNull, GraphQLString } from "graphql";
-import { mutationWithClientMutationId, toGlobalId } from "graphql-relay";
-import { UserConnection } from "../UserType";
+import { mutationWithClientMutationId } from "graphql-relay";
+import UserType from "../UserType";
 import UserModel from "../UserModel";
 
 import * as UserLoader from "../UserLoader";
@@ -42,23 +42,19 @@ export default mutationWithClientMutationId({
     await user.save();
 
     return {
-      user: user._id,
+      id: user._id,
       error: null,
     };
   },
   outputFields: {
-    userEdge: {
-      type: UserConnection.edgeType,
+    user: {
+      type: UserType,
       resolve: async ({ id }, _, context) => {
-        const newUser = await UserLoader.load(context, id);
-
-        if (!newUser) {
+        if (!id) {
           return null;
         }
 
-        return {
-          cursor: toGlobalId("User", newUser._id),
-        };
+        return await UserLoader.load(context, id);
       },
     },
     error: {
