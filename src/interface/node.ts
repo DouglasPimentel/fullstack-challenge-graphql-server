@@ -5,8 +5,8 @@ import {
   GraphQLNonNull,
   GraphQLResolveInfo,
   GraphQLTypeResolver,
+  GraphQLID,
 } from "graphql";
-import { GraphQLID } from "graphql";
 
 interface GraphQLNodeDefinitions<TContext> {
   nodeInterface: GraphQLInterfaceType;
@@ -51,7 +51,7 @@ export function nodeDefinitions<TContext>(
           description: "The ID of an object",
         },
       },
-      resolve: (obj, { id }, context, info) =>
+      resolve: (_, { id }, context, info) =>
         id ? idFetcher(id, context, info) : null,
     },
     nodesField: {
@@ -65,7 +65,7 @@ export function nodeDefinitions<TContext>(
           description: "The IDs of objects",
         },
       },
-      resolve: (obj, { ids }, context, info) =>
+      resolve: (_, { ids }, context, info) =>
         Promise.all(
           ids.map((id) => Promise.resolve(idFetcher(id, context, info)))
         ),
