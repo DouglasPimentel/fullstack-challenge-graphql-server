@@ -10,7 +10,8 @@
     "es": "node -r esbuild-register",
     "start": "yarn es ./src/server.ts",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "update-schema": "babel-node --extensions \".es6,.js,.es,.jsx,.mjs,.ts,.tsx\" scripts/updateSchema.ts"
   },
   "dependencies": {
     "@entria/graphql-mongoose-loader": "^4.4.0",
