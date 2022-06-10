@@ -13,7 +13,13 @@ export default mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLString),
     },
   },
-  mutateAndGetPayload: async ({ id }: ToolDeleteMutationArgs) => {
+  mutateAndGetPayload: async ({ id }: ToolDeleteMutationArgs, context) => {
+    if (!context.userId) {
+      return {
+        error: "not authenticated",
+      };
+    }
+
     const tool = await ToolModel.findById(id);
 
     if (!tool) {

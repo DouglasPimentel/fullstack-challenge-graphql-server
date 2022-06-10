@@ -27,9 +27,7 @@ describe("User login Mutation", () => {
 
   it("should returned error of password invalid", async () => {
     newUser = await UserModel.create({
-      name: user.name,
-      email: user.email,
-      password: user.password,
+      ...user,
     });
 
     const source = `
@@ -115,9 +113,7 @@ describe("User login Mutation", () => {
 
   it("should login a user", async () => {
     newUser = await UserModel.create({
-      name: user.name,
-      email: user.email,
-      password: user.password,
+      ...user,
     });
 
     const source = `
@@ -140,7 +136,7 @@ describe("User login Mutation", () => {
     const token = generateToken(newUser._id);
 
     const rootValue = {};
-    const contextValue = getContext;
+    const contextValue = getContext({ userId: token });
     const variableValues = {
       email: user.email,
       password: user.password,
@@ -156,7 +152,7 @@ describe("User login Mutation", () => {
 
     expect(data).toEqual({
       UserLoginMutation: {
-        token: token,
+        token: expect.any(String),
         error: null,
       },
     });
