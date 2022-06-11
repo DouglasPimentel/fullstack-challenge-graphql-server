@@ -14,4 +14,10 @@ describe("Root route test", () => {
 
     expect(response.body).toEqual({ message: "GraphQL Server" });
   });
+
+  it("should return response with status code 404", async () => {
+    response = await supertest(app.callback()).get("/not-found");
+
+    expect(response.statusCode).toBe(404);
+  });
 });

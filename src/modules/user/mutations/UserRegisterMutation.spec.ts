@@ -21,14 +21,7 @@ describe("User Register Mutation", () => {
     password: "123456",
   };
 
-  it("should not register with an existing email", async () => {
-    const newUser = await UserModel.create({
-      name: user.name,
-      email: user.email,
-      password: user.password,
-    });
-
-    const source = `
+  const source = `
       mutation RegisterUser (
         $name: String!
         $email: String!
@@ -48,6 +41,11 @@ describe("User Register Mutation", () => {
         }
       }
     `;
+
+  it("should not register with an existing email", async () => {
+    const newUser = await UserModel.create({
+      ...user,
+    });
 
     const rootValue = {};
     const contextValue = getContext;
@@ -74,7 +72,7 @@ describe("User Register Mutation", () => {
   });
 
   it("should register a new user", async () => {
-    const source = `
+    const query = `
       mutation RegisterUser (
         $name: String!
         $email: String!
@@ -95,14 +93,12 @@ describe("User Register Mutation", () => {
     const rootValue = {};
     const contextValue = getContext;
     const variableValues = {
-      name: user.name,
-      email: user.email,
-      password: user.password,
+      ...user,
     };
 
     const { data } = await graphql({
       schema,
-      source,
+      source: query,
       rootValue,
       contextValue,
       variableValues,
@@ -116,27 +112,6 @@ describe("User Register Mutation", () => {
   });
 
   it("should not register with an invalid email", async () => {
-    const source = `
-      mutation RegisterUser (
-        $name: String!
-        $email: String!
-        $password: String!
-      ) {
-        UserRegisterMutation (
-          input: {
-            name: $name
-            email: $email
-            password: $password
-          }
-        ) {
-          user {
-            _id
-          }
-          error
-        }
-      }
-    `;
-
     const rootValue = {};
     const contextValue = getContext;
     const variableValues = {

@@ -17,25 +17,6 @@ export default new GraphQLObjectType<GraphQLContext, any>({
     id: globalIdField("Query"),
     node: NodeField,
     nodes: NodesField,
-    users: {
-      type: new GraphQLNonNull(UserConnection.connectionType),
-      args: {
-        ...connectionArgs,
-      },
-      resolve: async (_, args, context) => {
-        return await UserLoader.loadUsers(context, args);
-      },
-    },
-    me: {
-      type: UserType,
-      resolve: async (_, _args, context) => {
-        if (!context.userId) {
-          return null;
-        }
-
-        return await UserLoader.load(context, context.userId.id);
-      },
-    },
     tools: {
       type: new GraphQLNonNull(ToolConnection.connectionType),
       args: {
