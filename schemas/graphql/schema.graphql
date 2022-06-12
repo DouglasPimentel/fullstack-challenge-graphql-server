@@ -14,20 +14,6 @@ type Query {
     """The IDs of objects"""
     ids: [ID!]!
   ): [Node]!
-  users(
-    """Returns the items in the list that come after the specified cursor."""
-    after: String
-
-    """Returns the first n items from the list."""
-    first: Int
-
-    """Returns the items in the list that come before the specified cursor."""
-    before: String
-
-    """Returns the last n items from the list."""
-    last: Int
-  ): UserConnection!
-  me: User
   tools(
     """Returns the items in the list that come after the specified cursor."""
     after: String
@@ -47,68 +33,6 @@ type Query {
 interface Node {
   """The id of the object."""
   id: ID!
-}
-
-"""A connection to a list of items."""
-type UserConnection {
-  """Number of items in this connection"""
-  count: Int!
-
-  """
-  A count of the total number of objects in this connection, ignoring pagination.
-    This allows a client to fetch the first five objects by passing "5" as the
-    argument to "first", then fetch the total count so it could display "5 of 83",
-    for example.
-  """
-  totalCount: Int!
-
-  """Offset from start"""
-  startCursorOffset: Int!
-
-  """Offset till end"""
-  endCursorOffset: Int!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfoExtended!
-
-  """A list of edges."""
-  edges: [UserEdge]!
-}
-
-"""Information about pagination in a connection."""
-type PageInfoExtended {
-  """When paginating forwards, are there more items?"""
-  hasNextPage: Boolean!
-
-  """When paginating backwards, are there more items?"""
-  hasPreviousPage: Boolean!
-
-  """When paginating backwards, the cursor to continue."""
-  startCursor: String
-
-  """When paginating forwards, the cursor to continue."""
-  endCursor: String
-}
-
-"""An edge in a connection."""
-type UserEdge {
-  """The item at the end of the edge"""
-  node: User!
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-"""User data"""
-type User implements Node {
-  """The ID of an object"""
-  id: ID!
-  _id: String!
-  name: String!
-  email: String!
-  password: String!
-  created_at: String
-  updated_at: String
 }
 
 """A connection to a list of items."""
@@ -135,6 +59,21 @@ type ToolConnection {
 
   """A list of edges."""
   edges: [ToolEdge]!
+}
+
+"""Information about pagination in a connection."""
+type PageInfoExtended {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
 }
 
 """An edge in a connection."""
@@ -173,6 +112,18 @@ type UserRegisterMutationPayload {
   user: User
   error: String
   clientMutationId: String
+}
+
+"""User data"""
+type User implements Node {
+  """The ID of an object"""
+  id: ID!
+  _id: String!
+  name: String!
+  email: String!
+  password: String!
+  created_at: String
+  updated_at: String
 }
 
 input UserRegisterMutationInput {

@@ -6,15 +6,17 @@
   "author": "DouglasPimentel <dev.pimentel@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "esbuild ./src/server.ts --bundle --platform=node --outdir=dist",
+    "build": "yarn clean && esbuild ./src/server.ts --loader:.ts=ts --bundle --platform=node --target=node16.5.1 --outbase=src --outdir=dist --minify --sourcemap",
     "es": "node -r esbuild-register",
     "start": "yarn es ./src/server.ts",
     "test": "jest",
     "test:watch": "jest --watch",
-    "update-schema": "babel-node --extensions \".es6,.js,.es,.jsx,.mjs,.ts,.tsx\" scripts/updateSchema.ts"
+    "update-schema": "babel-node --extensions \".es6,.js,.es,.jsx,.mjs,.ts,.tsx\" scripts/updateSchema.ts",
+    "clean": "rimraf ./dist"
   },
   "dependencies": {
     "@entria/graphql-mongoose-loader": "^4.4.0",
+    "aws-sdk": "^2.1152.0",
     "bcrypt": "^5.0.1",
     "dataloader": "^2.1.0",
     "dotenv": "^16.0.1",
@@ -26,7 +28,10 @@
     "koa-bodyparser": "^4.3.0",
     "koa-graphql": "^0.12.0",
     "koa-router": "^10.1.1",
-    "mongoose": "^6.3.3"
+    "mock-aws-s3": "^4.0.2",
+    "mongoose": "^6.3.3",
+    "nock": "^13.2.6",
+    "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",
